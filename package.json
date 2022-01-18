@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "envato",
   "title": "Envato Sales",
   "version": "1.0.0",
@@ -18,7 +19,7 @@
   "preferences": [
     {
       "name": "token",
-      "type": "textfield",
+      "type": "password",
       "required": true,
       "title": "Envato Token",
       "description": "You need to provide an API token to access the API. The token must be a 32 character long alphanumeric string. See https://build.envato.com/api/#token"
