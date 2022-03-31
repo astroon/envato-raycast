@@ -35,8 +35,8 @@ type envatoUser = {
 
 type saleItem = {
 	item?: saleItemMeta;
-	amount?: Number = 0;
-	support_amount?: Number = 0;
+	amount?: Number;
+	support_amount?: Number;
 	previews?: previewsItem;
 };
 
@@ -45,13 +45,12 @@ type saleItemMeta = {
   url: [];
 };
 
-
 type previewsItem = { 
-	icon_with_landscape_preview?: String = "";
+	icon_with_landscape_preview?: String;
 };
 
 export default function Command() {
-  const [state, setState] = useState<{ showdetail: Boolean; account: []; user: envatoUser; portfolio: []; sales: saleItem; errors: envatoErrors }>({ showdetail: false, account: [], user: [] as envatoUser, portfolio: [], sales: [] as saleItem, errors: [] as envatoErrors });
+  const [state, setState] = useState<{ showdetail: Boolean; account: []; user: envatoUser; portfolio: []; sales: saleItem; badges: []; statement: []; errors: envatoErrors }>({ showdetail: false, account: [], user: [] as envatoUser, portfolio: [], sales: [] as saleItem, badges: [], statement: [], errors: [] as envatoErrors });
 
   useEffect(() => {
 	async function fetch() {
@@ -60,13 +59,19 @@ export default function Command() {
 		const username = client !== undefined ? await client.private.getUsername() : "";
 		const userInfo = client !== undefined ? await client.user.getAccountDetails(username) : [];
 		const accountInfo = client !== undefined ? await client.private.getAccountDetails() : [];
+		const badges = client !== undefined ? await client.user.getBadges(username) : [];
 		const portfolio = client !== undefined ? await client.catalog.searchItems({ username: username}) : [];
 		const salesInfo = client !== undefined ? await client.private.getSales() : [];
+		const statement = client !== undefined ? await client.private.getStatement({}) : [];
 		const salesEmpty: any = salesInfo.length === 0 ? { empty: true } : [];
+		console.log(statement);
+		console.log(salesInfo);
 		setState((oldState) => ({
 		  ...oldState,
 		  sales: salesInfo as saleItem,
+		  statement: statement as [],
 		  user: userInfo as envatoUser,
+		  badges: badges as [],
 		  account: accountInfo as [],
 		  portfolio: portfolio as [],
 		  errors: salesEmpty as envatoErrors,
@@ -103,9 +108,10 @@ export default function Command() {
 	}
 	return "$" + price + support_out;
   }
-  function AccountPortfolio(props: { portfolio: any}) {
+  function AccountPortfolio(props: { portfolio: any; badges: any;}) {
 
   return <List isLoading={props.portfolio.length === 0}>
+	  	<AccountBadges badges={props.badges}/>
 		<List.Section title="My Portfolio">
 			{ props.portfolio.matches.map((item, index) => {
 					return <PortfolioItem item={item} key={index}/>;
@@ -113,6 +119,25 @@ export default function Command() {
 		</List.Section>
 	  </List>
   }
+  function AccountBadges(props: { badges: any}) {
+  
+	return <List.Section>
+		<List.Item
+		  icon={Icon.Star}
+		  title={"Badges"}
+		  accessories={ props.badges.map((badge, index) => {
+						return {icon: badge.image};
+					  })}
+		 />
+		</List.Section>
+	}
+	function BadgeItem(props: { badge: any; key: number;}) {
+		const accessories = [{text: `${props.item.number_of_sales} Purchases`}, {text: `${props.item.rating.rating} (${props.item.rating.count})`, icon: { source: Icon.Star, tintColor: Color.Yellow }}]
+		return <List.Item
+			  icon={"/"}
+			  title={String(props.badge.name ?? "")}
+			/>;
+	}
   
   function PortfolioItem(props: { item: saleItem; key: number;}) {
 	  const accessories = [{text: `${props.item.number_of_sales} Purchases`}, {text: `${props.item.rating.rating} (${props.item.rating.count})`, icon: { source: Icon.Star, tintColor: Color.Yellow }}]
@@ -200,7 +225,7 @@ ${description}`;
 	  />
 	);
   }
-  function Account(props: { infoUser: any; infoAccount: any; portfolio: any;}) {
+  function Account(props: { infoUser: any; infoAccount: any; portfolio: any; badges: any; }) {
 	return (
 	<List.Item
 	  icon={props.infoUser.image ?? "/"}
@@ -212,12 +237,16 @@ ${description}`;
 	  ]}
 	  actions={
 		<ActionPanel>
-			<Action.Push title="Portfolio" target={<AccountPortfolio portfolio={props.portfolio}/>} />
+			<Action.Push title="Portfolio" target={<AccountPortfolio portfolio={props.portfolio} badges={props.badges}/>} />
 		</ActionPanel>
 	  }
 	/>
   );
   }
+  
+  
+  let arrPay = [];
+  let array3 = [];
 
   return (
 	<List isShowingDetail={state.showdetail} isLoading={state.sales.length === 0 && state.errors.reason == undefined && state.errors.empty !== true}>
@@ -228,7 +257,7 @@ ${description}`;
 				title="Username"
 			  />
 			) : (
-			  <Account infoUser={state.user} infoAccount={state.account} portfolio={state.portfolio}/>
+			  <Account infoUser={state.user} infoAccount={state.account} portfolio={state.portfolio} badges={state.badges}/>
 		   )}
 	  </List.Section>
 	  <List.Section title="Sales">
@@ -238,10 +267,27 @@ ${description}`;
 				  title="Loading..."
 				/>
 			  ) : (
-				state.sales.map((sale, index) => {
+				  state.statement.results.map((stateIt, index) => {
+					  if(stateIt.type == "Payout") {
+						  arrPay.push(stateIt);
+					  }
+					  // arrPay.push(stateIt.type);
+				  }),
+				  array3 = arrPay.concat(state.sales),
+				  console.log(array3),
+				array3.map((sale, index) => {
 				  const saleDate = String(dateFormat(sale["sold_at"], "dd, mm, yyyy"));
-				  if (saleDate == fullDate && state.errors !== []) return <SaleItem sale={sale} key={index} todey={true} item={true} />;
-				  if (saleDate != fullDate && state.errors !== []) return <SaleItem sale={sale} key={index} todey={false} item={true} />;
+				  const saleDateSt = String(dateFormat(sale["date"], "dd.mm.yyyy"));
+				  if (sale.type == "Payout" && state.errors !== []) return <List.Item
+					icon ={{ source: Icon.ArrowRight, tintColor: Color.Blue }}
+					title={String(sale.detail)}
+					subtitle={String(saleDateSt) ?? ""}
+					 accessories={[
+						{ text: String(sale.amount) }
+					  ]}
+					/>;
+				  if (saleDate == fullDate && sale.type === undefined && state.errors !== []) return <SaleItem sale={sale} key={index} todey={true} item={true} />;
+				  if (saleDate != fullDate && sale.type === undefined && state.errors !== []) return <SaleItem sale={sale} key={index} todey={false} item={true} />;
 				})
 			 )}
 	  </List.Section>
