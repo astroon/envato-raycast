@@ -2,7 +2,7 @@ import {
   ActionPanel, Action, List,
   getPreferenceValues, OpenInBrowserAction,
   showToast, ToastStyle,
-  Detail, Icon, Color,
+  Detail, Icon, Color, environment, updateCommandMetadata
 } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { envatoErrors, envatoUser, saleItem, saleItemMeta, wpThemeMetadata, previewsItem } from "./types";
@@ -64,3 +64,10 @@ export const useFetch = () => {
 	
 	return state;
 }
+
+
+{/* export default async function main() {
+  console.log("launchType", environment.launchType);
+  const count = await fetchUnreadNotificationCount();
+  await updateCommandMetadata({ subtitle: `Unread Notifications: ${count}` });
+} */}

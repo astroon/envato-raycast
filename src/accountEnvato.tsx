@@ -8,6 +8,7 @@
   import { AccountBadges } from "./badgesEnvato";
   import { SaleItemDetail } from "./saleItem";
 import dateFormat from "dateformat";
+import { useFetch } from "./utils";
   
   export function AccountItem(props: { infoUser: any; infoAccount: any; portfolio: any; badges: any; }) {
 	return (
@@ -53,7 +54,7 @@ import dateFormat from "dateformat";
 	return <List isLoading={props.portfolio.length === 0}>
 			<AccountBadges badges={props.badges}/>
 		  <List.Section title="My Portfolio">
-			  { props.portfolio.matches.map((item, index) => {
+			  { props.portfolio.matches?.map((item, index) => {
 					  return <PortfolioItem item={item} key={index}/>;
 					})}
 		  </List.Section>
@@ -71,4 +72,22 @@ import dateFormat from "dateformat";
 			   <AccountItem infoUser={props.state.user} infoAccount={props.state.account} portfolio={props.state.portfolio} badges={props.state.badges}/>
 			)}
 	   </List.Section>
+ }
+ 
+ export default function accountEnvato() {
+	 const state = useFetch();
+	 
+	 if (state.errors.reason !== undefined && state.errors.empty !== true) {
+		 return (
+		   <Detail markdown={`# 😢 ${state.errors.reason ?? ""} \n \`\`\`\n${state.errors.description ?? ""}\n\`\`\``} />
+		 );
+	   }
+	   return <List isLoading={state.portfolio.length === 0}>
+		   		<Account state={state}/>
+				 <List.Section title="My Portfolio">
+					 { state.portfolio.matches?.map((item, index) => {
+							 return <PortfolioItem item={item} key={index}/>;
+						   })}
+				 </List.Section>
+		   </List>
  }
