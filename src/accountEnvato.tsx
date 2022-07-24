@@ -1,16 +1,11 @@
-  import {
-	ActionPanel, Action, List,
-	getPreferenceValues, OpenInBrowserAction,
-	showToast, ToastStyle,
-	Detail, Icon, Color,
-  } from "@raycast/api";
-  
-  import { AccountBadges } from "./badgesEnvato";
-  import { SaleItemDetail } from "./saleItem";
+import { ActionPanel, Action, List, Detail, Icon, Color } from "@raycast/api";
+import { AccountBadges } from "./badgesEnvato";
+import { SaleItemDetail } from "./saleItem";
 import dateFormat from "dateformat";
 import { useFetch } from "./utils";
+import { saleItem } from "./types";
   
-  export function AccountItem(props: { infoUser: any; infoAccount: any; portfolio: any; badges: any; }) {
+export function AccountItem(props: { infoUser: any; infoAccount: any; portfolio: any; badges: any; }) {
 	return (
 	<List.Item
 	  icon={props.infoUser.image ?? "/"}
@@ -29,8 +24,8 @@ import { useFetch } from "./utils";
   );
   }
   
-  export function PortfolioItem(props: { item: saleItem; key: number;}) {
-	const accessories = [{text: `${props.item.number_of_sales} Purchases`}, {text: `${props.item.rating.rating} (${props.item.rating.count})`, icon: { source: Icon.Star, tintColor: Color.Yellow }}]
+export function PortfolioItem(props: { item: saleItem; key: number;}) {
+	const accessories = [{text: `${props.item.number_of_sales} Purchases`}, {text: `${props.item.rating?.rating} (${props.item.rating?.count})`, icon: { source: Icon.Star, tintColor: Color.Yellow }}]
 	const icon = props.item.previews.icon_with_landscape_preview.icon_url ?? "/";
 	const title = props.item.name ?? "/";
   
@@ -75,19 +70,17 @@ import { useFetch } from "./utils";
  }
  
  export default function accountEnvato() {
-	 const state = useFetch();
-	 
-	 if (state.errors.reason !== undefined && state.errors.empty !== true) {
-		 return (
-		   <Detail markdown={`# 😢 ${state.errors.reason ?? ""} \n \`\`\`\n${state.errors.description ?? ""}\n\`\`\``} />
-		 );
-	   }
-	   return <List isLoading={state.portfolio.length === 0}>
-		   		<Account state={state}/>
-				 <List.Section title="My Portfolio">
-					 { state.portfolio.matches?.map((item, index) => {
-							 return <PortfolioItem item={item} key={index}/>;
-						   })}
-				 </List.Section>
-		   </List>
+	const state = useFetch();
+
+	if (state.errors.reason !== undefined && state.errors.empty !== true) {
+		return ( <Detail markdown={`# 😢 ${state.errors.reason ?? ""} \n \`\`\`\n${state.errors.description ?? ""}\n\`\`\``} />);
+	}
+	return <List isLoading={state.portfolio.length === 0}>
+   			<Account state={state}/>
+		 	<List.Section title="My Portfolio">
+			 	{ state.portfolio.matches?.map((item, index) => {
+					 	return <PortfolioItem item={item} key={index}/>;
+				   	})}
+		 	</List.Section>
+   		  </List>
  }

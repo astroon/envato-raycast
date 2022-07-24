@@ -1,25 +1,25 @@
-import {
-  ActionPanel, Action, List,
-  getPreferenceValues, OpenInBrowserAction,
-  showToast, ToastStyle,
-  Detail, Icon, Color, environment, updateCommandMetadata
-} from "@raycast/api";
+import { getPreferenceValues, showToast, ToastStyle } from "@raycast/api";
 import { useState, useEffect } from "react";
-import { envatoErrors, envatoUser, saleItem, saleItemMeta, wpThemeMetadata, previewsItem } from "./types";
+import { envatoErrors, envatoUser, saleItem } from "./types";
 import Envato from "envato";
 const token = getPreferenceValues().token;
 
+// DATE
 const date = new Date();
 const day = date.getDate();
 const month = date.getMonth() + 1;
 const year = date.getFullYear();
 export const fullDate = `${day}, ${month}, ${year}`;
 
+/*-----------------------------------*/
+/*------ FETCH
+/*-----------------------------------*/
 export const useFetch = () => {
 	const [state, setState] = useState<{ showdetail: Boolean; account: []; user: envatoUser; portfolio: []; sales: saleItem; badges: []; statement: []; errors: envatoErrors }>({ showdetail: false, account: [], user: [] as envatoUser, portfolio: [], sales: [] as saleItem, badges: [], statement: [], errors: [] as envatoErrors });
 	
 	async function fetch() {
 	  try {
+		// GET API
 		const client = Envato !== undefined ? new Envato.Client(token) : undefined;
 		const username = client !== undefined ? await client.private.getUsername() : "";
 		const userInfo = client !== undefined ? await client.user.getAccountDetails(username) : [];
@@ -29,8 +29,6 @@ export const useFetch = () => {
 		const salesInfo = client !== undefined ? await client.private.getSales() : [];
 		const statement = client !== undefined ? await client.private.getStatement({}) : [];
 		const salesEmpty: any = salesInfo.length === 0 ? { empty: true } : [];
-		console.log(statement);
-		console.log(salesInfo);
 		setState((oldState) => ({
 		  ...oldState,
 		  sales: salesInfo as saleItem,
@@ -42,6 +40,7 @@ export const useFetch = () => {
 		  errors: salesEmpty as envatoErrors,
 		}));
 	  } catch (error: any) {
+		// ERRORS
 		let reason = "Error";
 		let description = "An unknown error has occurred.";
 		if (error.response !== undefined){
@@ -58,16 +57,7 @@ export const useFetch = () => {
 	  }
 	}
 
-	useEffect(() => {
-		fetch();
-	}, []);
+	useEffect(() => { fetch() }, []);
 	
 	return state;
 }
-
-
-{/* export default async function main() {
-  console.log("launchType", environment.launchType);
-  const count = await fetchUnreadNotificationCount();
-  await updateCommandMetadata({ subtitle: `Unread Notifications: ${count}` });
-} */}

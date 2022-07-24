@@ -1,24 +1,24 @@
-import {
-  List, Detail, Icon, Color,
-} from "@raycast/api";
+import { List, Detail, Icon } from "@raycast/api";
 import dateFormat from "dateformat";
 import { Account } from "./accountEnvato";
 import { SaleItem, PayoutItem } from "./saleItem";
 import { useFetch, fullDate } from "./utils";
 
+/*-----------------------------------*/
+/*------ INDEX
+/*-----------------------------------*/
 export default function Command() {
 	const state = useFetch();
 	
+	// IF EMPTY
 	if (state.errors.reason !== undefined && state.errors.empty !== true) {
-		return (
-		  <Detail markdown={`# 😢 ${state.errors.reason ?? ""} \n \`\`\`\n${state.errors.description ?? ""}\n\`\`\``} />
-		);
-	  }
+		return ( <Detail markdown={`# 😢 ${state.errors.reason ?? ""} \n \`\`\`\n${state.errors.description ?? ""}\n\`\`\``} />);
+	}
   
   
-  let arrPay = [];
-  let array3 = [];
-  let sales = state.sales;
+	let arrPay = [];
+	let array3 = [];
+	let sales = state.sales;
 
   return (
 	<List isShowingDetail={state.showdetail} isLoading={Object.keys(sales).length === 0 && state.errors.reason == undefined && state.errors.empty !== true}>

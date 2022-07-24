@@ -21,13 +21,6 @@
       "subtitle": "Envato",
       "description": "My Protfolio For Envato",
       "mode": "view"
-    },
-    {
-      "name": "newSales",
-      "title": "New Sales",
-      "subtitle": "Envato",
-      "description": "New Sales",
-      "mode": "menu-bar"
     }
   ],
   "preferences": [
