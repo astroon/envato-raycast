@@ -1,8 +1,9 @@
-import { List, Detail, Icon } from "@raycast/api";
+import { List, Detail, Icon, environment } from "@raycast/api";
 import dateFormat from "dateformat";
 import { Account } from "./accountEnvato";
 import { SaleItem, PayoutItem } from "./saleItem";
 import { useFetch, fullDate } from "./utils";
+import fs from "fs";
 
 /*-----------------------------------*/
 /*------ INDEX
@@ -19,6 +20,13 @@ export default function Command() {
 	let arrPay = [];
 	let array3 = [];
 	let sales = state.sales;
+	var cache;
+	
+	fs.readFile(`${environment.supportPath}/cache.json`, function(err, buf) {
+	  console.log(JSON.parse(buf.toString()));
+	  cache = JSON.parse(buf.toString());
+	  sales = JSON.parse(buf.toString());
+	});
 
   return (
 	<List isShowingDetail={state.showdetail} isLoading={Object.keys(sales).length === 0 && state.errors.reason == undefined && state.errors.empty !== true}>

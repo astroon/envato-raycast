@@ -1,8 +1,9 @@
-import { getPreferenceValues, showToast, ToastStyle } from "@raycast/api";
+import { getPreferenceValues, showToast, ToastStyle, environment } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { envatoErrors, envatoUser, saleItem } from "./types";
 import Envato from "envato";
 const token = getPreferenceValues().token;
+import fs from "fs";
 
 // DATE
 const date = new Date();
@@ -29,6 +30,14 @@ export const useFetch = () => {
 		const salesInfo = client !== undefined ? await client.private.getSales() : [];
 		const statement = client !== undefined ? await client.private.getStatement({}) : [];
 		const salesEmpty: any = salesInfo.length === 0 ? { empty: true } : [];
+		// CACHE
+		fs.writeFile(`${environment.supportPath}/cache.json`, JSON.stringify(salesInfo), err => {
+		  if (err) {
+			console.error(err);
+		  }
+		  // file written successfully
+		  console.error(environment.supportPath);
+		});
 		setState((oldState) => ({
 		  ...oldState,
 		  sales: salesInfo as saleItem,
