@@ -21,15 +21,22 @@ export const useFetch = () => {
 	async function fetch() {
 	  try {
 		// GET API
+		var cache = fs.readFileSync(`${environment.supportPath}/cache.json`, 'utf8');
+		console.log(JSON.parse(cache))
 		const client = Envato !== undefined ? new Envato.Client(token) : undefined;
 		const username = client !== undefined ? await client.private.getUsername() : "";
 		const userInfo = client !== undefined ? await client.user.getAccountDetails(username) : [];
 		const accountInfo = client !== undefined ? await client.private.getAccountDetails() : [];
 		const badges = client !== undefined ? await client.user.getBadges(username) : [];
 		const portfolio = client !== undefined ? await client.catalog.searchItems({ username: username}) : [];
-		const salesInfo = client !== undefined ? await client.private.getSales() : [];
+		const salesInfo = client !== undefined ? await client.private.getSales() : JSON.parse(cache);
 		const statement = client !== undefined ? await client.private.getStatement({}) : [];
 		const salesEmpty: any = salesInfo.length === 0 ? { empty: true } : [];
+		console.log("JSON.parse(cache)")
+		
+		var cache = fs.readFileSync(`${environment.supportPath}/cache.json`, 'utf8');
+		console.log(JSON.parse(cache))
+		{/* console.log(sales[0]?.sold_at); */}
 		// CACHE
 		fs.writeFile(`${environment.supportPath}/cache.json`, JSON.stringify(salesInfo), err => {
 		  if (err) {

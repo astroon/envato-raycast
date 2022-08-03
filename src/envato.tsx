@@ -17,36 +17,38 @@ export default function Command() {
 	}
   
   
-	let arrPay = [];
-	let array3 = [];
+	let statementItems = [];
+	let resultItems = [];
 	let sales = state.sales;
-	var cache;
+	{/* console.log(state.sales); */}
+	function cacheItems() {
+		var cache = fs.readFileSync(`${environment.supportPath}/cache.json`, 'utf8');;
+		{/* console.log(sales[0]?.sold_at); */}
+		{/* console.log(cache); */}
+		if (sales[0]?.sold_at == undefined && cache || sales[0]?.sold_at !== cache[0]?.sold_at) {
+			sales = cache as saleItem;
+	 	}	
+	}
+	{/* cacheItems(); */}
+	console.log(state.sales);
 	
-	fs.readFile(`${environment.supportPath}/cache.json`, function(err, buf) {
-	  console.log(JSON.parse(buf.toString()));
-	  cache = JSON.parse(buf.toString());
-	  sales = JSON.parse(buf.toString());
-	});
 
   return (
 	<List isShowingDetail={state.showdetail} isLoading={Object.keys(sales).length === 0 && state.errors.reason == undefined && state.errors.empty !== true}>
-		<Account state={state}/>
+			<Account state={state}/>
   			<List.Section title="Sales">
 	  			{state.user.username === "" ||  state.user.username == undefined ? (
 						<List.EmptyView icon={{ source: Icon.TwoArrowsClockwise }} title="Loading..." />
 		  			) : (
-			  			state.statement.results.map((stateIt, index) => {
-			  				if(stateIt.type == "Payout") {
-					  			arrPay.push(stateIt);
-				  			}
+			  			state.statement.results.map((item, index) => {
+			  				if(item.type == "Payout") { statementItems.push(item); }
 			  			}),
-			  			array3 = arrPay.concat(state.sales),
-			  			console.log(array3),
-						array3.map((sale, index) => {
-			  			const saleDate = String(dateFormat(sale["sold_at"], "dd, mm, yyyy"));
-						 <PayoutItem sale={sale} state={state}/>
-			  			if (saleDate == fullDate && sale.type === undefined && state.errors !== []) return <SaleItem sale={sale} key={index} todey={true} item={true} />;
-			  			if (saleDate != fullDate && sale.type === undefined && state.errors !== []) return <SaleItem sale={sale} key={index} todey={false} item={true} />;
+			  			resultItems = statementItems.concat(state.sales).sort((a, b) => b.date - a.sold_at),
+						resultItems.map((sale, index) => {
+			  				const saleDate = String(dateFormat(sale["sold_at"], "d, m, yyyy"));
+							if (sale.type == "Payout" && state.errors !== []) return <PayoutItem sale={sale}/>
+			  				if (saleDate == fullDate && sale.type === undefined && state.errors !== []) return <SaleItem sale={sale} key={index} todey={true} item={true} />;
+			  				if (saleDate != fullDate && sale.type === undefined && state.errors !== []) return <SaleItem sale={sale} key={index} todey={false} item={true} />;
 						})
 		 			)}
   			</List.Section>

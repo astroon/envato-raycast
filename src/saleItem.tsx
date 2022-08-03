@@ -16,8 +16,8 @@ function price(price: "", support: "") {
 /*-----------------------------------*/
 export function SaleItem(props: { sale: saleItem; key: number; todey: Boolean, item: Boolean}) {
 	const accessories = props.todey ? [
-		{text: `💵 ${price(props.sale.amount, props.sale.support_amount)}`},
-	    {icon: { source: Icon.Dot, tintColor: Color.Red }}
+		{icon: { source: Icon.Dot, tintColor: Color.Red }},
+		{text: price(props.sale.amount, props.sale.support_amount), icon: { source: Icon.BankNote, tintColor: Color.Green } }
 	] : [{ text: price(props.sale.amount, props.sale.support_amount), icon: { source: Icon.BankNote, tintColor: Color.Green } }]
 	const icon = props.item == true ? props.sale.item.previews.icon_with_landscape_preview.icon_url : props.sale.previews.icon_with_landscape_preview.icon_url;
 	const title = props.item == true ? props.sale.item?.name : props.sale.name;
@@ -40,10 +40,8 @@ export function SaleItem(props: { sale: saleItem; key: number; todey: Boolean, i
 /*-----------------------------------*/
 /*------ PAYOUT ITEM  
 /*-----------------------------------*/
-export function PayoutItem(props: { sale: saleItem; state: any;}) {
+export function PayoutItem(props: { sale: saleItem;}) {
 	const saleDateSt = String(dateFormat(props.sale.date, "dd.mm.yyyy"));
-
-	if (props.sale.type !== "Payout" && props.state.errors === [])  { return }
 	
 	return <List.Item
 		icon ={{ source: Icon.ArrowRight, tintColor: Color.Blue }}
