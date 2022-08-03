@@ -47,7 +47,7 @@ export function PayoutItem(props: { sale: saleItem;}) {
 		icon ={{ source: Icon.ArrowRight, tintColor: Color.Blue }}
 		title={String(props.sale.detail)}
 		subtitle={String(saleDateSt) ?? ""}
-		accessories={[ { text: String(props.sale.amount) } ]}
+		accessories={[{ text: String(props.sale.amount), icon: { source: Icon.BankNote, tintColor: Color.Blue } } ]}
 	/>;
 }
   
