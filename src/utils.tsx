@@ -35,8 +35,6 @@ export const useFetch = () => {
 		console.log("JSON.parse(cache)")
 		
 		var cache = fs.readFileSync(`${environment.supportPath}/cache.json`, 'utf8');
-		console.log(JSON.parse(cache))
-		{/* console.log(sales[0]?.sold_at); */}
 		// CACHE
 		fs.writeFile(`${environment.supportPath}/cache.json`, JSON.stringify(salesInfo), err => {
 		  if (err) {

@@ -16,20 +16,15 @@ export default function Command() {
 		return ( <Detail markdown={`# 😢 ${state.errors.reason ?? ""} \n \`\`\`\n${state.errors.description ?? ""}\n\`\`\``} />);
 	}
   
-  
 	let statementItems = [];
 	let resultItems = [];
 	let sales = state.sales;
-	{/* console.log(state.sales); */}
 	function cacheItems() {
 		var cache = fs.readFileSync(`${environment.supportPath}/cache.json`, 'utf8');;
-		{/* console.log(sales[0]?.sold_at); */}
-		{/* console.log(cache); */}
 		if (sales[0]?.sold_at == undefined && cache || sales[0]?.sold_at !== cache[0]?.sold_at) {
 			sales = cache as saleItem;
 	 	}	
 	}
-	{/* cacheItems(); */}
 	console.log(state.sales);
 	
 

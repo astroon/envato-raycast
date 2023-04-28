@@ -1,14 +1,14 @@
 
 export interface envatoErrors {
-		empty?: boolean;
-		reason?: string;
-		description?: string;
+	empty?: boolean;
+	reason?: string;
+	description?: string;
 };
 
 export interface  envatoUser {
-		username?: string;
-		sales?: string;
-		image?: string;
+	username?: string;
+	sales?: string;
+	image?: string;
 };
 
 export interface saleItem {
@@ -41,27 +41,28 @@ export interface saleItem {
 };
 
 export interface  saleItemMeta {
-		wordpress_theme_metadata?: wpThemeMetadata;
-		url?: [];
-		name?: string;
-		number_of_sales?: String;
-		author_username?: String;
-		author_url?: String;
-		rating_count?: Number;
-		rating?: saleRating;
+	wordpress_theme_metadata?: wpThemeMetadata;
+	url?: [];
+	name?: string;
+	number_of_sales?: String;
+	author_username?: String;
+	author_url?: String;
+	rating_count?: Number;
+	rating?: saleRating;
 };
+
 export interface  saleRating {
 	rating?: Number;
 	count?: Number;
 }
 
 export interface  wpThemeMetadata {
-		theme_name?: string;
-		name?: String;
-		author_name?: string;
-		author_username?: String;
-		version?: string;
-		description?: string;
+	theme_name?: string;
+	name?: String;
+	author_name?: string;
+	author_username?: String;
+	version?: string;
+	description?: string;
 };
 
 export interface  previewsItem { 

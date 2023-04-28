@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "envato",
   "title": "Envato Sales",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tracking New Sales For Envato Author",
   "icon": "icon.png",
   "author": "astroon",
