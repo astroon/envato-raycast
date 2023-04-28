@@ -1,4 +1,4 @@
-import { getPreferenceValues, showToast, ToastStyle, environment } from "@raycast/api";
+import { getPreferenceValues, showToast, Toast, environment } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { envatoErrors, envatoUser, saleItem } from "./types";
 import Envato from "envato";
@@ -81,7 +81,11 @@ export const useFetch = () => {
         ...oldState,
         errors: out as envatoErrors,
       }));
-      showToast(ToastStyle.Failure, reason, description);
+      await showToast({
+        style: Toast.Style.Failure,
+        title: reason,
+        message: description,
+      });
       return;
     }
   }

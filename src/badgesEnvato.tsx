@@ -1,5 +1,4 @@
 import { List, Icon, Color } from "@raycast/api";
-import { saleItem } from "./types";
 
 /*-----------------------------------*/
 /*------ BADGES

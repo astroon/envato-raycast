@@ -1,4 +1,4 @@
-import { ActionPanel, Action, List, OpenInBrowserAction, Detail, Icon, Color } from "@raycast/api";
+import { ActionPanel, Action, List, Detail, Icon, Color } from "@raycast/api";
 import dateFormat from "dateformat";
 import { saleItem } from "./types";
 
@@ -33,8 +33,8 @@ export function SaleItem(props: { sale: saleItem; key: number; todey: boolean; i
       ];
   const icon =
     props.item == true
-      ? props.sale.item.previews.icon_with_landscape_preview.icon_url
-      : props.sale.previews.icon_with_landscape_preview.icon_url;
+      ? props.sale.item?.previews?.icon_with_landscape_preview?.icon_url
+      : props.sale.previews?.icon_with_landscape_preview?.icon_url;
   const title = props.item == true ? props.sale.item?.name : props.sale.name;
 
   return (

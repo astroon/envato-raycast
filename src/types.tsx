@@ -48,6 +48,7 @@ export interface saleItemMeta {
   author_url?: string;
   rating_count?: number;
   rating?: saleRating;
+  previews?: previewsItem;
 }
 
 export interface saleRating {
@@ -65,5 +66,9 @@ export interface wpThemeMetadata {
 }
 
 export interface previewsItem {
-  icon_with_landscape_preview?: string;
+  icon_with_landscape_preview?: previewsItemURL;
+}
+
+export interface previewsItemURL {
+  icon_url?: string;
 }

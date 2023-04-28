@@ -1,4 +1,4 @@
-import { ActionPanel, Action, List, Detail, Icon, Color, Grid } from "@raycast/api";
+import { ActionPanel, Action, List, Detail, Icon, Color } from "@raycast/api";
 import { AccountBadges } from "./badgesEnvato";
 import { SaleItemDetail } from "./saleItem";
 import dateFormat from "dateformat";
