@@ -4,4 +4,4 @@
 </p>
 <p align="center">Tracking New Sales For Envato Author</p>
 
-![](https://github.com/astroon/envato-raycast/blob/main/assets/Preview-raycast.png?raw=true)
+![](https://github.com/astroon/envato-raycast/blob/main/metadata/envato-01.png?raw=true)
