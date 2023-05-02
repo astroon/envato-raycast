@@ -1,7 +1,10 @@
-export interface envatoErrors {
-  empty?: boolean;
-  reason?: string;
-  description?: string;
+export interface statementUser {
+  results?: any;
+}
+
+export interface statementResults {
+  item?: any;
+  index?: number;
 }
 
 export interface envatoUser {
@@ -71,4 +74,33 @@ export interface previewsItem {
 
 export interface previewsItemURL {
   icon_url?: string;
+  landscape_url?: string
+}
+
+export interface GetData {
+  showdetail?: boolean;
+  account?: [];
+  user?: envatoUser;
+  portfolio?: Portfolio;
+  sales?: saleItem[];
+  badges?: [];
+  statement?: statementUser;
+  errors?: envatoErrors;
+  isLoading: boolean;
+}
+
+export interface Portfolio {
+  matches: PortfolioItems[];
+}
+
+export interface PortfolioItems {
+  id: number;
+  name: string;
+  number_of_sales: string;
+}
+
+export interface envatoErrors {
+  empty?: boolean;
+  reason?: string;
+  description?: string;
 }

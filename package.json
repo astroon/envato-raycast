@@ -33,6 +33,7 @@
     }
   ],
   "dependencies": {
+    "@raycast/utils": "^1.5.2",
     "@raycast/api": "^1.49.3",
     "dateformat": "^5.0.3",
     "envato": "^3.0.8",
